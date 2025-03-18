@@ -1,14 +1,118 @@
-var chat = document.getElementById("chat");
-var inputWrapper = document.getElementById("input-wrapper");
+"use strict";
+const chat = document.getElementById("chat");
+const inputWrapper = document.getElementById("input-wrapper");
 //Variables:
-var currentQuestion = 0;
-var questions = [
+let currentQuestion = 0;
+const holidays = [
+    {
+        name: "Kräftpremiär",
+        image: "krafta.png",
+    },
+    {
+        name: "Surströmmingspremiär",
+        image: "stromming.png",
+    },
+    {
+        name: "Midsommar",
+        image: "midsummer.png",
+    },
+    {
+        name: "Jul",
+        image: "christmas.png",
+    },
+    {
+        name: "Påsk",
+        image: "easter.png",
+    },
+    {
+        name: "Mårten Gås",
+        image: "goose.png",
+    },
+    {
+        name: "Thanksgiving",
+        image: "thanksgiving.png",
+    },
+    {
+        name: "Våffeldagen",
+        image: "waffle.png",
+    },
+    {
+        name: "Fössta tossdan i mass",
+        image: "cake.png",
+    },
+    {
+        name: "Fettisdagen",
+        image: "semla.png",
+    },
+    {
+        name: "Lucia",
+        image: "lucia.png",
+    },
+    {
+        name: "Kanelbullens dag",
+        image: "cinnamon.png",
+    },
+    {
+        name: "Alla hjärtans dag",
+        image: "valentine.png",
+    },
+    {
+        name: "Halloween",
+        image: "pumpkin.png",
+    },
+    {
+        name: "Black Friday",
+        image: "shopping.png",
+    },
+    {
+        name: "Nyårsdagen",
+        image: "pizza.png",
+    },
+    {
+        name: "Första maj",
+        image: "protest.png",
+    },
+    {
+        name: "Kristi Himmelfärd",
+        image: "angel.png",
+    },
+    {
+        name: "Advent",
+        image: "candle.png",
+    },
+    {
+        name: "Trettondagen",
+        image: "wise.png",
+    },
+    {
+        name: "Nationaldagen",
+        image: "sweden.png",
+    },
+    {
+        name: "Alla helgons dag",
+        image: "headstone.png",
+    },
+    {
+        name: "Nyårsafton",
+        image: "new-year.png",
+    },
+    {
+        name: "Valborgsmässoafton",
+        image: "fire.png",
+    },
+];
+const questions = [
     {
         id: 0,
         question: "Hej! Vill du ta reda på vilken högtid vi firar?",
         answerOptions: [
             { answer: "Ja", nextQuestion: 1 },
-            { answer: "Nej", nextQuestion: "Tråkigt. Då har du ingen användning av mig." },
+            {
+                answer: "Nej",
+                nextQuestion: {
+                    name: "Tråkigt. Då har du ingen användning av mig.",
+                },
+            },
         ],
     },
     {
@@ -24,14 +128,20 @@ var questions = [
         question: "Äter man fisk?",
         answerOptions: [
             { answer: "Ja", nextQuestion: 3 },
-            { answer: "Nej", nextQuestion: "Kräftpremiär" },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Kräftpremiär") || 0,
+            },
         ],
     },
     {
         id: 3,
         question: "Luktar fisken illa?",
         answerOptions: [
-            { answer: "Ja", nextQuestion: "Surströmmingspremiär" },
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Surströmmingspremiär") || 0
+            },
             { answer: "Nej", nextQuestion: 4 },
         ],
     },
@@ -40,15 +150,24 @@ var questions = [
         question: "Dricker man must?",
         answerOptions: [
             { answer: "Ja", nextQuestion: 5 },
-            { answer: "Nej", nextQuestion: "Midsommar" },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Midsommar") || 0
+            },
         ],
     },
     {
         id: 5,
         question: "Tittar man på TV kl. 15.00?",
         answerOptions: [
-            { answer: "Ja", nextQuestion: "Jul" },
-            { answer: "Nej", nextQuestion: "Påsk" },
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Jul") || 0
+            },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Påsk") || 0
+            },
         ],
     },
     {
@@ -63,8 +182,14 @@ var questions = [
         id: 7,
         question: "Är det verkligen en svensk högtid?",
         answerOptions: [
-            { answer: "Ja, om Skåne är svenskt", nextQuestion: "Mårten Gås" },
-            { answer: "Tveksamt", nextQuestion: "Thanksgiving" },
+            {
+                answer: "Ja, om Skåne är svenskt",
+                nextQuestion: holidays.find((day) => day.name === "Mårten Gås") || 0
+            },
+            {
+                answer: "Tveksamt",
+                nextQuestion: holidays.find((day) => day.name === "Thanksgiving") || 0
+            },
         ],
     },
     {
@@ -87,7 +212,10 @@ var questions = [
         id: 10,
         question: "Äts varma med sylt till?",
         answerOptions: [
-            { answer: "Ja", nextQuestion: "Våffeldagen" },
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Våffeldagen") || 0
+            },
             { answer: "Nej", nextQuestion: 11 },
         ],
     },
@@ -95,16 +223,28 @@ var questions = [
         id: 11,
         question: "Tårta eller bulle?",
         answerOptions: [
-            { answer: "Tårta", nextQuestion: "Fössta tossdan i mass" },
-            { answer: "Bulle", nextQuestion: "Fettisdagen" },
+            {
+                answer: "Tårta",
+                nextQuestion: holidays.find((day) => day.name === "Fössta tossdan i mass") || 0
+            },
+            {
+                answer: "Bulle",
+                nextQuestion: holidays.find((day) => day.name === "Fettisdagen") || 0
+            },
         ],
     },
     {
         id: 12,
         question: "Russin i bullen?",
         answerOptions: [
-            { answer: "Ja", nextQuestion: "Lucia" },
-            { answer: "Nej", nextQuestion: "Kanelbullens dag" },
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Lucia") || 0
+            },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Kanelbullens dag") || 0
+            },
         ],
     },
     {
@@ -119,9 +259,18 @@ var questions = [
         id: 14,
         question: "Vad köper man?",
         answerOptions: [
-            { answer: "Rosor", nextQuestion: "Alla hjärtans dag" },
-            { answer: "Pumpor", nextQuestion: "Halloween" },
-            { answer: "Allt möjligt", nextQuestion: "Black Friday" },
+            {
+                answer: "Rosor",
+                nextQuestion: holidays.find((day) => day.name === "Alla hjärtans dag") || 0
+            },
+            {
+                answer: "Pumpor",
+                nextQuestion: holidays.find((day) => day.name === "Halloween") || 0
+            },
+            {
+                answer: "Allt möjligt",
+                nextQuestion: holidays.find((day) => day.name === "Black Friday") || 0
+            },
         ],
     },
     {
@@ -136,16 +285,22 @@ var questions = [
         id: 16,
         question: "Pizza?",
         answerOptions: [
-            { answer: "Ja", nextQuestion: "Nyårsdagen" },
-            { answer: "Nej", nextQuestion: "Första maj" },
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Nyårsdagen") || 0
+            },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Första maj") || 0
+            },
         ],
     },
     {
         id: 17,
         question: "Är det något med Jesus?",
         answerOptions: [
-            { answer: "Ja", nextQuestion: 18 },
-            { answer: "Nej", nextQuestion: 20 },
+            { answer: "Ja", nextQuestion: 22 },
+            { answer: "Nej", nextQuestion: 23 },
         ],
     },
     {
@@ -153,15 +308,24 @@ var questions = [
         question: "Jesus födelse?",
         answerOptions: [
             { answer: "Ja", nextQuestion: 19 },
-            { answer: "Nej", nextQuestion: "Kristi Himmelfärd" },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Kristi Himmelfärd") || 0
+            },
         ],
     },
     {
         id: 19,
         question: "Ska vi tända ljus?",
         answerOptions: [
-            { answer: "Ja", nextQuestion: "Advent" },
-            { answer: "Nej", nextQuestion: "Trettondagen" },
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Advent") || 0
+            },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Trettondagen") || 0
+            },
         ],
     },
     {
@@ -169,71 +333,151 @@ var questions = [
         question: "Är det något som brinner?",
         answerOptions: [
             { answer: "Ja", nextQuestion: 21 },
-            { answer: "Nej", nextQuestion: "Nationaldagen" },
+            {
+                answer: "Nej",
+                nextQuestion: holidays.find((day) => day.name === "Nationaldagen") || 0
+            },
         ],
     },
     {
         id: 21,
         question: "Vad brinner?",
         answerOptions: [
-            { answer: "Ljus på gravar", nextQuestion: "Alla helgons dag" },
-            { answer: "Fyrverkerier", nextQuestion: "Nyårsafton" },
-            { answer: "Brasor", nextQuestion: "Valborgsmässoafton" }
+            {
+                answer: "Ljus på gravar",
+                nextQuestion: holidays.find((day) => day.name === "Alla helgons dag") || 0
+            },
+            {
+                answer: "Fyrverkerier",
+                nextQuestion: holidays.find((day) => day.name === "Nyårsafton") || 0
+            },
+            {
+                answer: "Brasor",
+                nextQuestion: holidays.find((day) => day.name === "Valborgsmässoafton") || 0
+            },
+        ],
+    },
+    {
+        id: 22,
+        question: "Är du säker på att man inte äter fisk?",
+        answerOptions: [
+            { answer: "Jo, sill!", nextQuestion: 4 },
+            { answer: "Nä, det gör vi inte", nextQuestion: 18 },
+        ],
+    },
+    {
+        id: 23,
+        question: "Ivanhoe på TV?",
+        answerOptions: [
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Nyårsdagen") || 0
+            },
+            { answer: "Nej", nextQuestion: 24 },
+        ],
+    },
+    {
+        id: 24,
+        question: "Trafikomläggningar?",
+        answerOptions: [
+            {
+                answer: "Ja",
+                nextQuestion: holidays.find((day) => day.name === "Första maj") || 0
+            },
+            { answer: "Nej", nextQuestion: 20 },
         ],
     },
 ];
+// Selects three random holiday-images and turns them into HTML
+const threeRandomHolidayPictures = () => {
+    const images = [];
+    let imageRow = "<div class='image-row'>";
+    for (let i = 0; i < 3; i++) {
+        const randomNumber = Math.floor(Math.random() * holidays.length);
+        images.push(holidays[randomNumber].image || "robot.png");
+    }
+    images.forEach((pic) => imageRow += `<img src="assets/holidays/${pic}" alt="Holiday icon"/>`);
+    imageRow += "</div>";
+    return imageRow;
+};
 // Adds a chat bubble in the correct place based on who the sender is
-var showMessage = function (message, sender) {
+const showMessage = (message, sender, addRandomImages = true) => {
     //Checks if the sender is the user and adds posted message from the user
     if (sender === "user") {
-        chat.innerHTML += "\n      <section class=\"user-msg\">\n        <div class=\"bubble user-bubble\">\n          <p>".concat(message, "</p>\n        </div>\n        <img src=\"assets/user.png\" alt=\"User\" />  \n      </section>\n    ");
+        chat.innerHTML += `
+      <section class="user-msg">
+        <div class="bubble user-bubble">
+          <p>${message}</p>
+        </div>
+        <img src="assets/mulled-wine.png" alt="User icon" /> 
+      </section>
+    `;
         //Checks if the sender is the bot and adds posted message from the bot
     }
     else if (sender === "bot") {
-        chat.innerHTML += "\n      <section class=\"bot-msg\">\n        <img src=\"assets/bot.png\" alt=\"Bot\" />\n        <div class=\"bubble bot-bubble\">\n          <p>".concat(message, "</p>\n        </div>\n      </section>\n    ");
+        chat.innerHTML += `
+      <section class="bot-msg">
+        <img src="assets/robot.png" alt="Bot icon" />
+        <div class="bubble bot-bubble">
+          <p>${message}</p>
+        </div>
+      </section>
+    `;
+        {
+            addRandomImages && (chat.innerHTML += threeRandomHolidayPictures());
+        }
     }
     //Makes the chat scroll to the last message when there are many
     chat.scrollTop = chat.scrollHeight;
 };
-// Clears the chat window and adds button to start over
-var clearWindow = function () {
+// Clears the chat window
+const clearWindow = () => {
     chat.innerHTML = "";
 };
 // Adds buttons for answering
-var addButtons = function (buttons) {
+const addButtons = (buttons) => {
     inputWrapper.innerHTML = "";
-    buttons.forEach(function (button) {
-        inputWrapper.innerHTML += "\n      <button id=\"".concat(button.answer, "\" class=\"chat-btn\" type=\"submit\">").concat(button.answer, "</button>\n    ");
+    buttons.forEach((button) => {
+        inputWrapper.innerHTML += `
+      <button id="${button.answer}" class="chat-btn" type="submit">${button.answer}</button>
+    `;
     });
-    var buttonOne = document.getElementById(buttons[0].answer);
-    var buttonTwo = document.getElementById(buttons[1].answer);
+    const buttonOne = document.getElementById(buttons[0].answer);
+    const buttonTwo = document.getElementById(buttons[1].answer);
     if (buttonOne) {
-        buttonOne.addEventListener("click", function () { return handleAnswer(0); });
+        buttonOne.addEventListener("click", () => handleAnswer(0));
     }
     if (buttonTwo) {
-        buttonTwo.addEventListener("click", function () { return handleAnswer(1); });
+        buttonTwo.addEventListener("click", () => handleAnswer(1));
     }
     if (buttons.length > 2) {
-        var buttonThree = document.getElementById(buttons[2].answer);
+        const buttonThree = document.getElementById(buttons[2].answer);
         if (buttonThree) {
-            buttonThree.addEventListener("click", function () { return handleAnswer(2); });
+            buttonThree.addEventListener("click", () => handleAnswer(2));
         }
     }
 };
 // Handle the answer
-var handleAnswer = function (answerIndex) {
-    var answerToHandle = questions[currentQuestion].answerOptions[answerIndex];
+const handleAnswer = (answerIndex) => {
+    const answerToHandle = questions[currentQuestion].answerOptions[answerIndex];
     showMessage(answerToHandle.answer, "user");
     if (typeof answerToHandle.nextQuestion === "number") {
         currentQuestion = answerToHandle.nextQuestion;
-        setTimeout(function () { return askQuestion(); }, 1000);
+        setTimeout(() => askQuestion(), 1000);
     }
     else {
-        showMessage(answerToHandle.nextQuestion, "bot");
-        inputWrapper.innerHTML = "\n      <button id=\"start\" class=\"chat-btn\" type=\"submit\">B\u00F6rja om</button>\n    ";
-        var startButton = document.getElementById("start");
+        showMessage(answerToHandle.nextQuestion.name, "bot", false);
+        inputWrapper.innerHTML = `
+      <button id="start" class="chat-btn" type="submit">Börja om</button>
+    `;
+        if (answerToHandle.nextQuestion.image) {
+            chat.innerHTML += `
+        <img class="holiday-icon" src="assets/holidays/${answerToHandle.nextQuestion.image}" alt="Icon related to the holiday" />
+      `;
+        }
+        const startButton = document.getElementById("start");
         if (startButton) {
-            startButton.addEventListener("click", function () {
+            startButton.addEventListener("click", () => {
                 clearWindow();
                 currentQuestion = 0;
                 askQuestion();
@@ -242,7 +486,7 @@ var handleAnswer = function (answerIndex) {
     }
 };
 // Bot asks current question
-var askQuestion = function () {
+const askQuestion = () => {
     showMessage(questions[currentQuestion].question, "bot");
     addButtons(questions[currentQuestion].answerOptions);
 };
