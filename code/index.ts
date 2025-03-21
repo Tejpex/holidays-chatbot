@@ -322,7 +322,7 @@ const questions: Question[] = [
   },
   {
     id: 18,
-    question: "Jesus födelse?",
+    question: "Är det vinter ute?",
     answerOptions: [
       { answer: "Ja", nextQuestion: 19 },
       {
@@ -379,7 +379,7 @@ const questions: Question[] = [
     question: "Är du säker på att man inte äter fisk?",
     answerOptions: [
       { answer: "Jo, sill!", nextQuestion: 4 },
-      { answer: "Nä, det gör vi inte", nextQuestion: 18 },
+      { answer: "Nej, ingen fisk", nextQuestion: 18 },
     ],
   },
   {
@@ -395,7 +395,7 @@ const questions: Question[] = [
   },
   {
     id: 24,
-    question: "Trafikomläggningar?",
+    question: "Tal från politiker?",
     answerOptions: [
       {
         answer: "Ja",
@@ -410,9 +410,12 @@ const questions: Question[] = [
 const threeRandomHolidayPictures = (): string => {
   const images: string[] = []
   let imageRow: string = "<div class='image-row'>"
-  for (let i = 0; i < 3; i++) {
+  while (images.length < 3) {
     const randomNumber: number = Math.floor(Math.random() * holidays.length)
-    images.push(holidays[randomNumber].image || "robot.png")
+    const newImage: string = holidays[randomNumber].image || "robot.png"
+    if (!images.some((image) => image === newImage)) {
+      images.push(newImage)
+    }
   }
   images.forEach((pic) =>
     imageRow += `<img src="assets/holidays/${pic}" alt="Holiday icon"/>`
@@ -489,7 +492,11 @@ const handleAnswer = (answerIndex: number): void => {
     currentQuestion = answerToHandle.nextQuestion
     setTimeout(() => askQuestion(), 1000)
   } else {
-    showMessage(answerToHandle.nextQuestion.name, "bot", false)
+    if (answerToHandle.nextQuestion.image) {
+      showMessage(`Vi firar ${answerToHandle.nextQuestion.name.toLowerCase()}!`, "bot", false)
+    } else {
+      showMessage(answerToHandle.nextQuestion.name, "bot", false)
+    }
     inputWrapper.innerHTML = `
       <button id="start" class="chat-btn" type="submit">Börja om</button>
     `
